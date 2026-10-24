@@ -1,0 +1,11 @@
+# Render Blueprint: free web service (no persistent disk).
+# Data lives in ./data on the instance's ephemeral filesystem, so accounts, contacts and
+# voice notes reset whenever the service restarts, redeploys or spins down after idling.
+services:
+  - type: web
+    name: voicely
+    runtime: node
+    plan: free
+    buildCommand: npm install --omit=dev
+    startCommand: npm start
+    healthCheckPath: /healthz

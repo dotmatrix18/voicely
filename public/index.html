@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content" />
+  <meta name="theme-color" content="#f3f4f8" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#0b0c11" media="(prefers-color-scheme: dark)" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="description" content="The messenger where you can only talk. Voice notes only." />
+  <title>Voicely</title>
+  <link rel="manifest" href="/manifest.webmanifest" />
+  <link rel="icon" href="/icons/icon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+  <link rel="preload" href="/fonts/InterVariable.woff2" as="font" type="font/woff2" crossorigin />
+  <script src="/js/theme-boot.js"></script>
+  <link rel="stylesheet" href="/css/tokens.css" />
+  <link rel="stylesheet" href="/css/base.css" />
+  <link rel="stylesheet" href="/css/app.css" />
+</head>
+<body>
+  <!-- ================= Onboarding ================= -->
+  <section id="onboard" class="onboard hidden" aria-label="Welcome">
+    <div class="onboard-card">
+      <div class="onboard-logo" aria-hidden="true"><div class="bars"><i></i><i></i><i></i><i></i><i></i></div></div>
+      <div>
+        <h1>Voicely</h1>
+        <p class="muted">The messenger where you can only talk.<br />No typing. Just your voice.</p>
+      </div>
+      <form id="signupForm" autocomplete="off">
+        <label class="field">Username
+          <div class="input-wrap"><span>@</span><input id="suUsername" class="input" maxlength="20" placeholder="adrish" autocapitalize="none" spellcheck="false" required aria-describedby="suUsernameHint" /></div>
+          <small id="suUsernameHint" class="hint">3–20 lowercase letters, numbers or _</small>
+        </label>
+        <label class="field">Display name
+          <input id="suName" class="input" maxlength="32" placeholder="Adrish Manna" required />
+        </label>
+        <button type="submit" class="btn btn-primary btn-block">Create account</button>
+        <p id="suError" class="error" role="alert"></p>
+      </form>
+      <button id="showPairBtn" class="btn-link" type="button">Already have an account? Link this device</button>
+      <form id="pairForm" class="hidden" autocomplete="off">
+        <label class="field">Pairing code from your other device
+          <input id="pairCode" class="input" maxlength="9" placeholder="ABCD-EFGH" autocapitalize="characters" spellcheck="false" required />
+        </label>
+        <button type="submit" class="btn btn-primary btn-block">Link device</button>
+        <p id="pairError" class="error" role="alert"></p>
+      </form>
+    </div>
+  </section>
+
+  <!-- ================= App shell ================= -->
+  <div id="shell" class="shell hidden">
+    <!-- list pane: Chats / Rooms / Me -->
+    <aside id="listPane" class="pane list-pane" aria-label="Navigation">
+      <header id="listAppbar" class="appbar">
+        <span class="spacer"></span>
+        <div id="listAppbarTitle" class="appbar-title">Chats</div>
+        <button id="addContactBtn" class="icon-btn accent" aria-label="Add contact" title="Add contact" data-icon="userPlus"></button>
+      </header>
+      <div id="listScroll" class="pane-scroll">
+        <div id="ptr" class="ptr" aria-hidden="true"><div class="spinner"></div></div>
+        <h1 id="largeTitle" class="large-title">Chats</h1>
+        <div id="tab-chats" class="tab-panel" role="tabpanel" aria-labelledby="tabChats"></div>
+        <div id="tab-rooms" class="tab-panel hidden" role="tabpanel" aria-labelledby="tabRooms"></div>
+        <div id="tab-me" class="tab-panel hidden" role="tabpanel" aria-labelledby="tabMe"></div>
+      </div>
+      <nav class="tabbar" role="tablist" aria-label="Sections">
+        <button id="tabChats" class="tab" role="tab" data-tab="chats" aria-selected="true"><span data-icon="chats"></span><span>Chats</span><b id="chatsBadge" class="pill-badge hidden"></b></button>
+        <button id="tabRooms" class="tab" role="tab" data-tab="rooms" aria-selected="false"><span data-icon="hash"></span><span>Rooms</span></button>
+        <button id="tabMe" class="tab" role="tab" data-tab="me" aria-selected="false"><span data-icon="user"></span><span>Me</span></button>
+      </nav>
+    </aside>
+
+    <!-- chat pane -->
+    <section id="chatPane" class="pane chat-pane" aria-label="Conversation">
+      <div id="chatPlaceholder" class="placeholder"></div>
+      <div id="chatView" class="chat-view hidden">
+        <header class="appbar chat-appbar">
+          <button id="backBtn" class="icon-btn back-btn" aria-label="Back" data-icon="back"></button>
+          <button id="chatHead" class="chat-head" aria-label="View profile">
+            <div id="chatAvatar" class="avatar md"></div>
+            <div class="chat-head-text">
+              <div id="chatTitle" class="chat-title"></div>
+              <div id="chatStatus" class="chat-status"></div>
+            </div>
+          </button>
+          <button id="listenBtn" class="icon-btn" aria-label="Listen mode: play all unplayed voice notes" title="Listen mode" data-icon="headphones"></button>
+          <button id="chatMenuBtn" class="icon-btn" aria-label="More options" data-icon="more"></button>
+        </header>
+        <div class="timeline-wrap">
+          <div id="stickyDate" class="sticky-date" aria-hidden="true"></div>
+          <main id="timeline" class="timeline" aria-live="polite" aria-label="Voice notes"><div id="tlInner" class="tl-inner"></div></main>
+          <button id="fabLatest" class="fab-latest" aria-label="Scroll to latest"><span data-icon="down"></span><span id="fabCount" class="count hidden"></span></button>
+        </div>
+        <footer id="composer" class="composer" data-state="idle">
+          <div class="composer-inner">
+            <div class="rec-pill">
+              <div class="idle"><span data-icon="wave" class="faint"></span><span><b>Hold</b> to record</span><span class="faint small"><span data-icon="lock" data-size="xs"></span>slide up to lock</span></div>
+              <div class="live">
+                <button id="recTrash" class="pill-btn danger locked-only" aria-label="Discard recording" data-icon="trash"></button>
+                <span class="rec-dot"></span><span id="recTime" class="rec-time">0:00</span>
+                <canvas id="liveWave" class="live-wave" aria-hidden="true"></canvas>
+                <span class="slide-cancel"><span data-icon="back" data-size="sm"></span>Slide to cancel</span>
+                <button id="recStop" class="pill-btn locked-only" aria-label="Stop and preview" data-icon="stop"></button>
+              </div>
+              <div class="preview">
+                <button id="pvTrash" class="pill-btn danger" aria-label="Discard recording" data-icon="trash"></button>
+                <button id="pvPlay" class="pill-btn" aria-label="Play preview"><span data-icon="play" class="i-play"></span></button>
+                <div id="pvWave" class="preview-wave" aria-label="Recording preview waveform"></div>
+                <span id="pvTime" class="rec-time small"></span>
+                <button id="pvTrim" class="chip trim-chip on" aria-pressed="true" title="Trim leading and trailing silence"><span data-icon="scissors" data-size="xs"></span><span>Trim</span></button>
+              </div>
+            </div>
+            <button id="micBtn" class="mic-fab" aria-label="Record a voice note. Hold to record, slide up to lock, slide left to cancel.">
+              <span data-icon="mic" class="i-mic"></span><span data-icon="send" class="i-send"></span>
+            </button>
+            <div id="lockRail" class="lock-rail" aria-hidden="true"><span data-icon="lock" data-size="sm"></span><span data-icon="up" data-size="sm" class="chev"></span></div>
+          </div>
+        </footer>
+      </div>
+    </section>
+  </div>
+
+  <!-- persistent mini player -->
+  <div id="miniPlayer" class="mini-player" role="region" aria-label="Now playing">
+    <div id="mpAvatar" class="avatar sm"></div>
+    <div id="mpMain" class="mp-main"><div id="mpTitle" class="mp-title"></div><div id="mpSub" class="mp-sub"></div></div>
+    <button id="mpPlay" class="icon-btn" aria-label="Play or pause"></button>
+    <button id="mpNext" class="icon-btn" aria-label="Next voice note" data-icon="next"></button>
+    <button id="mpClose" class="icon-btn" aria-label="Close player" data-icon="close"></button>
+    <div id="mpProgress" class="mp-progress"></div>
+  </div>
+
+  <div id="scrim" class="scrim hidden"></div>
+  <div id="sheet" class="sheet hidden" role="dialog" aria-modal="true"><div class="sheet-grip"></div><div id="sheetBody"></div></div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script type="module" src="/js/main.js"></script>
+</body>
+</html>

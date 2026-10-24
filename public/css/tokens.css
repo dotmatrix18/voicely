@@ -1,0 +1,68 @@
+/* =====================================================================
+   Voicely design tokens. Every colour, size, radius, shadow and motion
+   value lives here. Themes: [data-theme="light"|"dark"] on <html>.
+   Accent colours are set at runtime (js/theme.js) via --accent / --accent-2.
+   ===================================================================== */
+@font-face {
+  font-family: "InterVariable";
+  src: url("/fonts/InterVariable.woff2") format("woff2");
+  font-weight: 100 900; font-style: normal; font-display: swap;
+}
+:root {
+  /* typography */
+  --font: -apple-system, BlinkMacSystemFont, "InterVariable", "Inter", "Segoe UI", Roboto, system-ui, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
+  --fs-xs: 11px; --fs-sm: 13px; --fs-md: 15px; --fs-lg: 17px; --fs-xl: 20px; --fs-title: 34px;
+  --lh: 1.4; --tracking-tight: -0.022em;
+
+  /* spacing scale (4-pt) */
+  --s-1: 4px; --s-2: 8px; --s-3: 12px; --s-4: 16px; --s-5: 20px; --s-6: 24px; --s-8: 32px; --s-10: 40px;
+
+  /* radii */
+  --r-xs: 6px; --r-sm: 10px; --r-md: 14px; --r-lg: 20px; --r-xl: 28px; --r-full: 999px;
+
+  /* sizes */
+  --appbar-h: 56px; --tabbar-h: 58px; --composer-h: 84px; --list-w: 380px; --content-max: 760px;
+
+  /* motion */
+  --ease: cubic-bezier(.2, .8, .2, 1); --ease-spring: cubic-bezier(.34, 1.56, .64, 1);
+  --dur-1: 120ms; --dur-2: 220ms; --dur-3: 360ms;
+
+  /* accent (overridden by theme.js) */
+  --accent: #6d5dfc; --accent-2: #9b6dff; --on-accent: #ffffff;
+  --accent-soft: color-mix(in srgb, var(--accent) 14%, transparent);
+  --accent-grad: linear-gradient(135deg, var(--accent), var(--accent-2));
+
+  /* semantic */
+  --danger: #ef4462; --online: #22c55e; --rec: #ff3b5c;
+  --safe-t: env(safe-area-inset-top, 0px); --safe-b: env(safe-area-inset-bottom, 0px);
+}
+
+/* ---------- light ---------- */
+:root, :root[data-theme="light"] {
+  color-scheme: light;
+  --bg: #f3f4f8; --bg-chat: #eceef5; --surface: #ffffff; --surface-2: #f1f2f7; --surface-3: #e7e9f1;
+  --line: #e2e4ec; --line-strong: #d3d6e2;
+  --text: #11131a; --text-2: #575c72; --text-3: #8b90a6;
+  --bubble-theirs: #ffffff; --bubble-theirs-text: var(--text); --wave-theirs: #c9ccd9; --wave-theirs-on: var(--accent);
+  --bubble-mine-text: #ffffff; --wave-mine: rgba(255, 255, 255, .45); --wave-mine-on: #ffffff;
+  --glass: rgba(255, 255, 255, .78); --scrim: rgba(17, 19, 26, .38);
+  --shadow-1: 0 1px 2px rgba(17, 19, 26, .06), 0 1px 1px rgba(17, 19, 26, .04);
+  --shadow-2: 0 4px 14px rgba(17, 19, 26, .08), 0 1px 3px rgba(17, 19, 26, .06);
+  --shadow-3: 0 18px 50px rgba(17, 19, 26, .18), 0 4px 12px rgba(17, 19, 26, .08);
+  --skeleton: #e6e8ef; --skeleton-hi: #f3f4f8;
+}
+/* ---------- dark ---------- */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0b0c11; --bg-chat: #0e0f15; --surface: #15161d; --surface-2: #1c1e27; --surface-3: #252835;
+  --line: #22252f; --line-strong: #2e3240;
+  --text: #f1f2f7; --text-2: #a4a9bf; --text-3: #6d7389;
+  --bubble-theirs: #1e2029; --bubble-theirs-text: var(--text); --wave-theirs: #3b3f50; --wave-theirs-on: var(--accent-2);
+  --bubble-mine-text: #ffffff; --wave-mine: rgba(255, 255, 255, .42); --wave-mine-on: #ffffff;
+  --glass: rgba(18, 19, 26, .78); --scrim: rgba(0, 0, 0, .55);
+  --shadow-1: 0 1px 2px rgba(0, 0, 0, .4);
+  --shadow-2: 0 6px 18px rgba(0, 0, 0, .45);
+  --shadow-3: 0 24px 60px rgba(0, 0, 0, .6);
+  --skeleton: #1c1e27; --skeleton-hi: #262936;
+}

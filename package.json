@@ -1,0 +1,27 @@
+{
+  "name": "voice-only-chat",
+  "version": "3.0.0",
+  "description": "Voicely: a messenger where the only way to communicate is voice messages. Contacts, private 1:1 voice chats and group rooms.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "start:https": "HTTPS=1 node server.js",
+    "cert": "node scripts/make-cert.js",
+    "test": "node test/run-test.js && node test/audio-tools.test.mjs",
+    "test:browser": "node test/browser-test.js",
+    "screenshots": "node test/screenshots.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.21.2",
+    "socket.io": "^4.8.1"
+  },
+  "devDependencies": {
+    "playwright-core": "^1.64.1",
+    "selfsigned": "^2.4.1",
+    "socket.io-client": "^4.8.1"
+  }
+}
